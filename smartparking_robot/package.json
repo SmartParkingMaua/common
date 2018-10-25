@@ -1,0 +1,22 @@
+{
+  "name": "smartparking_robot",
+  "version": "1.0.0",
+  "description": "SmartParking Robot is a tool that generates fictional cars entrance and exit data",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SmartParkingMaua/common.git"
+  },
+  "author": "Kaisen-san",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SmartParkingMaua/common/issues"
+  },
+  "homepage": "https://github.com/SmartParkingMaua/common#readme",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}
