@@ -5,64 +5,62 @@ let _action;
 let _arrActionWeightPerHour;
 let _isRobotConfigured = false;
 
-
-// It is necessary to add 1 to every array length below in order to include
-// the last value of the specified range
-
-// Entrance weight arrays per hour
+/*
+ * It is necessary to add 1 to every array length below
+ * in order to include the last value of the specified range
+ */
 const arrEntranceWeightPerHour = [
-  [...Array(1 + 1).keys()],   // 24h to 1h
-  [...Array(1 + 1).keys()],   // 1h to 2h
-  [...Array(1 + 1).keys()],   // 2h to 3h
-  [...Array(1 + 1).keys()],   // 3h to 4h
-  [...Array(1 + 1).keys()],   // 4h to 5h
-  [...Array(2 + 1).keys()],   // 5h to 6h
-  [...Array(6 + 1).keys()],   // 6h to 7h
-  [...Array(12 + 1).keys()],  // 7h to 8h
-  [...Array(3 + 1).keys()],   // 8h to 9h
-  [...Array(6 + 1).keys()],   // 9h to 10h
-  [...Array(6 + 1).keys()],   // 10h to 11h
-  [...Array(6 + 1).keys()],   // 11h to 12h
-  [...Array(6 + 1).keys()],   // 12h to 13h
-  [...Array(3 + 1).keys()],   // 13h to 14h
-  [...Array(3 + 1).keys()],   // 14h to 15h
-  [...Array(3 + 1).keys()],   // 15h to 16h
-  [...Array(3 + 1).keys()],   // 16h to 17h
-  [...Array(6 + 1).keys()],   // 17h to 18h
-  [...Array(6 + 1).keys()],   // 18h to 19h
-  [...Array(6 + 1).keys()],   // 19h to 20h
-  [...Array(2 + 1).keys()],   // 20h to 21h
-  [...Array(2 + 1).keys()],   // 21h to 22h
-  [...Array(3 + 1).keys()],   // 22h to 23h
-  [...Array(1 + 1).keys()]    // 23h to 24h
+  [...Array(1 + 1).keys()],   // 0h - 1h
+  [...Array(1 + 1).keys()],   // 1h - 2h
+  [...Array(1 + 1).keys()],   // 2h - 3h
+  [...Array(1 + 1).keys()],   // 3h - 4h
+  [...Array(1 + 1).keys()],   // 4h - 5h
+  [...Array(2 + 1).keys()],   // 5h - 6h
+  [...Array(6 + 1).keys()],   // 6h - 7h
+  [...Array(12 + 1).keys()],  // 7h - 8h
+  [...Array(3 + 1).keys()],   // 8h - 9h
+  [...Array(6 + 1).keys()],   // 9h - 10h
+  [...Array(6 + 1).keys()],   // 10h - 11h
+  [...Array(6 + 1).keys()],   // 11h - 12h
+  [...Array(6 + 1).keys()],   // 12h - 13h
+  [...Array(3 + 1).keys()],   // 13h - 14h
+  [...Array(3 + 1).keys()],   // 14h - 15h
+  [...Array(3 + 1).keys()],   // 15h - 16h
+  [...Array(3 + 1).keys()],   // 16h - 17h
+  [...Array(6 + 1).keys()],   // 17h - 18h
+  [...Array(6 + 1).keys()],   // 18h - 19h
+  [...Array(6 + 1).keys()],   // 19h - 20h
+  [...Array(2 + 1).keys()],   // 20h - 21h
+  [...Array(2 + 1).keys()],   // 21h - 22h
+  [...Array(3 + 1).keys()],   // 22h - 23h
+  [...Array(1 + 1).keys()]    // 23h - 24h
 ];
 
-// Exit weight arrays per hour
 const arrExitWeightPerHour = [
-  [...Array(2 + 1).keys()],   // 24h to 1h
-  [...Array(1 + 1).keys()],   // 1h to 2h
-  [...Array(1 + 1).keys()],   // 2h to 3h
-  [...Array(1 + 1).keys()],   // 3h to 4h
-  [...Array(1 + 1).keys()],   // 4h to 5h
-  [...Array(1 + 1).keys()],   // 5h to 6h
-  [...Array(2 + 1).keys()],   // 6h to 7h
-  [...Array(4 + 1).keys()],   // 7h to 8h
-  [...Array(3 + 1).keys()],   // 8h to 9h
-  [...Array(3 + 1).keys()],   // 9h to 10h
-  [...Array(3 + 1).keys()],   // 10h to 11h
-  [...Array(4 + 1).keys()],   // 11h to 12h
-  [...Array(4 + 1).keys()],   // 12h to 13h
-  [...Array(10 + 1).keys()],  // 13h to 14h
-  [...Array(3 + 1).keys()],   // 14h to 15h
-  [...Array(6 + 1).keys()],   // 15h to 16h
-  [...Array(3 + 1).keys()],   // 16h to 17h
-  [...Array(6 + 1).keys()],   // 17h to 18h
-  [...Array(6 + 1).keys()],   // 18h to 19h
-  [...Array(4 + 1).keys()],   // 19h to 20h
-  [...Array(4 + 1).keys()],   // 20h to 21h
-  [...Array(4 + 1).keys()],   // 21h to 22h
-  [...Array(10 + 1).keys()],  // 22h to 23h
-  [...Array(4 + 1).keys()]    // 23h to 24h
+  [...Array(2 + 1).keys()],   // 0h - 1h
+  [...Array(1 + 1).keys()],   // 1h - 2h
+  [...Array(1 + 1).keys()],   // 2h - 3h
+  [...Array(1 + 1).keys()],   // 3h - 4h
+  [...Array(1 + 1).keys()],   // 4h - 5h
+  [...Array(1 + 1).keys()],   // 5h - 6h
+  [...Array(2 + 1).keys()],   // 6h - 7h
+  [...Array(4 + 1).keys()],   // 7h - 8h
+  [...Array(3 + 1).keys()],   // 8h - 9h
+  [...Array(3 + 1).keys()],   // 9h - 10h
+  [...Array(3 + 1).keys()],   // 10h - 11h
+  [...Array(4 + 1).keys()],   // 11h - 12h
+  [...Array(4 + 1).keys()],   // 12h - 13h
+  [...Array(10 + 1).keys()],  // 13h - 14h
+  [...Array(3 + 1).keys()],   // 14h - 15h
+  [...Array(6 + 1).keys()],   // 15h - 16h
+  [...Array(3 + 1).keys()],   // 16h - 17h
+  [...Array(6 + 1).keys()],   // 17h - 18h
+  [...Array(6 + 1).keys()],   // 18h - 19h
+  [...Array(4 + 1).keys()],   // 19h - 20h
+  [...Array(4 + 1).keys()],   // 20h - 21h
+  [...Array(4 + 1).keys()],   // 21h - 22h
+  [...Array(10 + 1).keys()],  // 22h - 23h
+  [...Array(4 + 1).keys()]    // 23h - 24h
 ];
 
 
@@ -107,9 +105,9 @@ const year = async (timestampMs) => {
     if (i <= 6) { // Vacations (January/February)
       await week(0.07, timestampMs);
     } else if (i === 7) { // Start of classes for the first year
-      await week(0.5, timestampMs);
+      await week(0.6, timestampMs);
     } else if (i >= 26 && i <= 30) { // Vacations (July)
-      await week(0.25, timestampMs);
+      await week(0.3, timestampMs);
     } else if (i >= 49 && i <= 51) { // After P4 and before PSub 2
       await week(0.7, timestampMs);
     } else if (i === 52) { // Christmas and New Year
