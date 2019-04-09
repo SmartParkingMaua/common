@@ -1,7 +1,3 @@
-const { post } = require( './postRegister' );
-const { write } = require( './writeRegister' );
-const { sql } = require( './sqlRegister' );
-
 let _registerMethod;
 let _options;
 let _parkingId;
@@ -12,213 +8,189 @@ let _isRobotConfigured = false;
 
 // It is necessary to add 1 to every array length below in order to include
 // the last value of the specified range
- 
+
 // Entrance weight arrays per hour
-let _entrance24to1  = [ ...Array( 1  + 1 ).keys() ];
-let _entrance1to2   = [ ...Array( 1  + 1 ).keys() ];
-let _entrance2to3   = [ ...Array( 1  + 1 ).keys() ];
-let _entrance3to4   = [ ...Array( 1  + 1 ).keys() ];
-let _entrance4to5   = [ ...Array( 1  + 1 ).keys() ];
-let _entrance5to6   = [ ...Array( 2  + 1 ).keys() ];
-let _entrance6to7   = [ ...Array( 6  + 1 ).keys() ];
-let _entrance7to8   = [ ...Array( 12 + 1 ).keys() ];
-let _entrance8to9   = [ ...Array( 3  + 1 ).keys() ];
-let _entrance9to10  = [ ...Array( 6  + 1 ).keys() ];
-let _entrance10to11 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance11to12 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance12to13 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance13to14 = [ ...Array( 3  + 1 ).keys() ];
-let _entrance14to15 = [ ...Array( 3  + 1 ).keys() ];
-let _entrance15to16 = [ ...Array( 3  + 1 ).keys() ];
-let _entrance16to17 = [ ...Array( 3  + 1 ).keys() ];
-let _entrance17to18 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance18to19 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance19to20 = [ ...Array( 6  + 1 ).keys() ];
-let _entrance20to21 = [ ...Array( 2  + 1 ).keys() ];
-let _entrance21to22 = [ ...Array( 2  + 1 ).keys() ];
-let _entrance22to23 = [ ...Array( 3  + 1 ).keys() ];
-let _entrance23to24 = [ ...Array( 1  + 1 ).keys() ];
+const arrEntranceWeightPerHour = [
+  [...Array(1 + 1).keys()],   // 24h to 1h
+  [...Array(1 + 1).keys()],   // 1h to 2h
+  [...Array(1 + 1).keys()],   // 2h to 3h
+  [...Array(1 + 1).keys()],   // 3h to 4h
+  [...Array(1 + 1).keys()],   // 4h to 5h
+  [...Array(2 + 1).keys()],   // 5h to 6h
+  [...Array(6 + 1).keys()],   // 6h to 7h
+  [...Array(12 + 1).keys()],  // 7h to 8h
+  [...Array(3 + 1).keys()],   // 8h to 9h
+  [...Array(6 + 1).keys()],   // 9h to 10h
+  [...Array(6 + 1).keys()],   // 10h to 11h
+  [...Array(6 + 1).keys()],   // 11h to 12h
+  [...Array(6 + 1).keys()],   // 12h to 13h
+  [...Array(3 + 1).keys()],   // 13h to 14h
+  [...Array(3 + 1).keys()],   // 14h to 15h
+  [...Array(3 + 1).keys()],   // 15h to 16h
+  [...Array(3 + 1).keys()],   // 16h to 17h
+  [...Array(6 + 1).keys()],   // 17h to 18h
+  [...Array(6 + 1).keys()],   // 18h to 19h
+  [...Array(6 + 1).keys()],   // 19h to 20h
+  [...Array(2 + 1).keys()],   // 20h to 21h
+  [...Array(2 + 1).keys()],   // 21h to 22h
+  [...Array(3 + 1).keys()],   // 22h to 23h
+  [...Array(1 + 1).keys()]    // 23h to 24h
+];
 
 // Exit weight arrays per hour
-let _exit24to1  = [ ...Array( 2  + 1 ).keys() ];
-let _exit1to2   = [ ...Array( 1  + 1 ).keys() ];
-let _exit2to3   = [ ...Array( 1  + 1 ).keys() ];
-let _exit3to4   = [ ...Array( 1  + 1 ).keys() ];
-let _exit4to5   = [ ...Array( 1  + 1 ).keys() ];
-let _exit5to6   = [ ...Array( 1  + 1 ).keys() ];
-let _exit6to7   = [ ...Array( 2  + 1 ).keys() ];
-let _exit7to8   = [ ...Array( 4  + 1 ).keys() ];
-let _exit8to9   = [ ...Array( 3  + 1 ).keys() ];
-let _exit9to10  = [ ...Array( 3  + 1 ).keys() ];
-let _exit10to11 = [ ...Array( 3  + 1 ).keys() ];
-let _exit11to12 = [ ...Array( 4  + 1 ).keys() ];
-let _exit12to13 = [ ...Array( 4  + 1 ).keys() ];
-let _exit13to14 = [ ...Array( 10 + 1 ).keys() ];
-let _exit14to15 = [ ...Array( 3  + 1 ).keys() ];
-let _exit15to16 = [ ...Array( 6  + 1 ).keys() ];
-let _exit16to17 = [ ...Array( 3  + 1 ).keys() ];
-let _exit17to18 = [ ...Array( 6  + 1 ).keys() ];
-let _exit18to19 = [ ...Array( 6  + 1 ).keys() ];
-let _exit19to20 = [ ...Array( 4  + 1 ).keys() ];
-let _exit20to21 = [ ...Array( 4  + 1 ).keys() ];
-let _exit21to22 = [ ...Array( 4  + 1 ).keys() ];
-let _exit22to23 = [ ...Array( 10 + 1 ).keys() ];
-let _exit23to24 = [ ...Array( 4  + 1 ).keys() ];
-
-
-const arrEntranceWeightPerHour = [ _entrance24to1, _entrance1to2, _entrance2to3, _entrance3to4,
-    _entrance4to5, _entrance5to6, _entrance6to7, _entrance7to8, _entrance8to9,
-    _entrance9to10, _entrance10to11, _entrance11to12, _entrance12to13, _entrance13to14,
-    _entrance14to15, _entrance15to16, _entrance16to17, _entrance17to18, _entrance18to19,
-    _entrance19to20, _entrance20to21, _entrance21to22, _entrance22to23, _entrance23to24
-];
-
-const arrExitWeightPerHour = [ _exit24to1, _exit1to2, _exit2to3, _exit3to4, _exit4to5, _exit5to6,
-        _exit6to7, _exit7to8, _exit8to9, _exit9to10, _exit10to11, _exit11to12, _exit12to13,
-        _exit13to14, _exit14to15, _exit15to16, _exit16to17, _exit17to18, _exit18to19,
-        _exit19to20, _exit20to21, _exit21to22, _exit22to23, _exit23to24
+const arrExitWeightPerHour = [
+  [...Array(2 + 1).keys()],   // 24h to 1h
+  [...Array(1 + 1).keys()],   // 1h to 2h
+  [...Array(1 + 1).keys()],   // 2h to 3h
+  [...Array(1 + 1).keys()],   // 3h to 4h
+  [...Array(1 + 1).keys()],   // 4h to 5h
+  [...Array(1 + 1).keys()],   // 5h to 6h
+  [...Array(2 + 1).keys()],   // 6h to 7h
+  [...Array(4 + 1).keys()],   // 7h to 8h
+  [...Array(3 + 1).keys()],   // 8h to 9h
+  [...Array(3 + 1).keys()],   // 9h to 10h
+  [...Array(3 + 1).keys()],   // 10h to 11h
+  [...Array(4 + 1).keys()],   // 11h to 12h
+  [...Array(4 + 1).keys()],   // 12h to 13h
+  [...Array(10 + 1).keys()],  // 13h to 14h
+  [...Array(3 + 1).keys()],   // 14h to 15h
+  [...Array(6 + 1).keys()],   // 15h to 16h
+  [...Array(3 + 1).keys()],   // 16h to 17h
+  [...Array(6 + 1).keys()],   // 17h to 18h
+  [...Array(6 + 1).keys()],   // 18h to 19h
+  [...Array(4 + 1).keys()],   // 19h to 20h
+  [...Array(4 + 1).keys()],   // 20h to 21h
+  [...Array(4 + 1).keys()],   // 21h to 22h
+  [...Array(10 + 1).keys()],  // 22h to 23h
+  [...Array(4 + 1).keys()]    // 23h to 24h
 ];
 
 
-async function year( timestampInSeconds ) {
+const config = ( registerMethodPromise, options, parkingId, action) => {
 
-    if ( _isRobotConfigured  === false ) {
-        console.error( 'The robot is not configured. Please use module.exports.config() method'
-                + ' to configure the robot before starting it.' );
-        return;
-    }
+  _registerMethod = registerMethodPromise;
 
-    for ( let i = 0; i < 52; i++ ) {
-        if ( i <= 6 ) { // Vacations
-            await week( 0.05, timestampInSeconds );
-        }
-        else if ( i === 7 ) { // Start of classes for the first year
-            await week( 0.4, timestampInSeconds );
-        }
-        else if ( i >= 26 && i <= 30 ) { // Vacations
-            await week( 0.2, timestampInSeconds );
-        }
-        else if ( i >= 49 && i <= 51 ) { // After P4 and before PSub 2
-            await week( 0.6, timestampInSeconds );
-        }
-        else if ( i === 52 ) { // Christmas and New Year
-            await week( 0.01, timestampInSeconds );
-        }
-        else { // Regular period of classes
-            await week( 1, timestampInSeconds );
-        }
+  _options = options;
 
-        timestampInSeconds += 604800; // One week period timestamp
-    }
+  // Validate parking id
+  if (parkingId <= 0) {
+    console.error('Invalid parkingId');
+    return;
+  }
+
+  _parkingId = parkingId;
+
+  // Validate action
+  if (action === 'entrance') {
+    _action = action;
+    _arrActionWeightPerHour = arrEntranceWeightPerHour;
+  } else if (action === 'exit') {
+    _action = action;
+    _arrActionWeightPerHour = arrExitWeightPerHour;
+  } else {
+    console.error('Invalid action');
+    return;
+  }
+
+  _isRobotConfigured = true;
 
 }
 
-async function week( weekWeight, timestampInSeconds ) {
+const year = async (timestampMs) => {
 
-    for ( let i = 0; i < 7; i++ ) {
-        if ( i === 0 ) { // Sunday
-            await day( weekWeight * 0.05, timestampInSeconds );
-        }
-        else if ( i === 6 ) { // Saturday
-            await day( weekWeight * 0.5, timestampInSeconds );
-        }
-        else { // Week days
-            await day( weekWeight * 1, timestampInSeconds );
-        }
+  if (_isRobotConfigured === false) {
+    console.error('The robot is not configured. Please import the config() method to configure the robot before starting it.');
+    return;
+  }
 
-        timestampInSeconds += 86400; // One day period timestamp
+  for (let i = 0; i < 52; i++) {
+    if (i <= 6) { // Vacations (January/February)
+      await week(0.07, timestampMs);
+    } else if (i === 7) { // Start of classes for the first year
+      await week(0.5, timestampMs);
+    } else if (i >= 26 && i <= 30) { // Vacations (July)
+      await week(0.25, timestampMs);
+    } else if (i >= 49 && i <= 51) { // After P4 and before PSub 2
+      await week(0.7, timestampMs);
+    } else if (i === 52) { // Christmas and New Year
+      await week(0.01, timestampMs);
+    } else { // Regular period of classes
+      await week(1, timestampMs);
     }
+
+    timestampMs += 604800 * 1000; // One week period timestamp
+  }
 
 }
 
-async function day( dayWeight, timestampInSeconds ) {
+const week = async (weekWeight, timestampMs) => {
 
-    let hourWeight;
-
-    for ( let i = 0; i < 24; i++ ) {
-        hourWeight = dayWeight * _arrActionWeightPerHour[i][
-                Math.floor( Math.random() * _arrActionWeightPerHour[i].length ) ];
-
-        await hour( hourWeight, timestampInSeconds );
-
-        timestampInSeconds += 3600; // One hour period timestamp
+  for (let i = 0; i < 7; i++) {
+    if (i === 0) { // Sunday
+      await day(weekWeight * 0.07, timestampMs);
+    } else if (i === 6) { // Saturday
+      await day(weekWeight * 0.7, timestampMs);
+    } else { // Week days
+      await day(weekWeight * 1, timestampMs);
     }
+
+    timestampMs += 86400 * 1000; // One day period timestamp
+  }
 
 }
 
-async function hour( hourWeight, timestampInSeconds ) {
+const day = async (dayWeight, timestampMs) => {
 
-    let carsPerMinute;
+  let hourWeight;
 
-    for ( let i = 0; i < 60; i++ ) {
-        carsPerMinute = Math.round( hourWeight * Math.random() );
+  for (let i = 0; i < 24; i++) {
+    hourWeight = dayWeight * _arrActionWeightPerHour[i][
+      Math.floor(Math.random() * _arrActionWeightPerHour[i].length)
+    ];
 
-        await minute( carsPerMinute, timestampInSeconds );
+    await hour(hourWeight, timestampMs);
 
-        timestampInSeconds += 60; // One minute period timestamp
-    }
+    timestampMs += 3600 * 1000; // One hour period timestamp
+  }
+
+}
+
+const hour = async (hourWeight, timestampMs) => {
+
+  let carsPerMinute;
+
+  for (let i = 0; i < 60; i++) {
+    carsPerMinute = Math.round(hourWeight * Math.random());
+
+    await minute(carsPerMinute, timestampMs);
+
+    timestampMs += 60 * 1000; // One minute period timestamp
+  }
 
 }
 
-async function minute( carsPerMinute, timestampInSeconds ) {
-    
-    for ( let i = 0; i < carsPerMinute; i++ ) {
-        await _registerMethod( _options, _parkingId, timestampInSeconds, _action )
-                .then( ( response ) => console.log( response ) )
-                .catch( ( error ) => console.log( error ) );
+const minute = async (carsPerMinute, timestampMs) => {
 
-        timestampInSeconds += 60 / carsPerMinute; // One car per X seconds period timestamp
-    }
-    
-}
+  for (let i = 0; i < carsPerMinute; i++) {
+    try {
+      const response = await _registerMethod(_options, _parkingId, timestampMs, _action);
 
-function config( registerMethod, options, parkingId, action ) {
-
-    // Validate register method
-    if ( registerMethod === 'post' ) {
-        _registerMethod = post;
+      console.log(response);
+      
+      timestampMs += 60 * 1000 / carsPerMinute; // One car per n seconds period timestamp
+    } catch (error) {
+      console.error(error);
     }
-    else if ( registerMethod === 'write' ) {
-        _registerMethod = write;        
-    }
-    else if ( registerMethod === 'sql' ) {
-        _registerMethod = sql;        
-    }
-    else {
-        console.error( 'Register method not defined' );
-        return;
-    }
-
-    // Validate parking id
-    if ( parkingId >= 0 ) {
-        _parkingId = parkingId;
-    }
-    else {
-        console.error( 'Parking id not defined' );
-        return;
-    }
-
-    // Validate action
-    if ( action === 'entrada' ) {
-        _action = 'entrada';
-        _arrActionWeightPerHour = arrEntranceWeightPerHour;
-    }
-    else if ( action === 'saida' ) {
-        _action = 'saida';
-        _arrActionWeightPerHour = arrExitWeightPerHour;
-    }
-    else {
-        console.error( 'Action not defined' );
-        return;
-    }
-
-    _options = options;
-
-    _isRobotConfigured = true;
+  }
 
 }
+
 
 module.exports = {
-    config: config,
-    start: year
+  config: config,
+  start: year,
+  // runWeek: week,
+  // runDay: day,
+  // runHour: hour,
+  // runMinute: minute
 }
