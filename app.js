@@ -4,7 +4,7 @@ const { postPromise } = require('./register_methods/postPromise');
 (async () => {
 
   const initialTimestampMs =
-    new Date('2019-01-01T00:00:00.000').getTime();
+    new Date('2018-01-01 00:00:00.000').getTime();
 
   const startDatetime = new Date().toLocaleString('pt-BR');
 

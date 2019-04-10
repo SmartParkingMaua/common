@@ -102,7 +102,7 @@ const year = async (timestampMs) => {
     return;
   }
 
-  for (let i = 0; i < 52; i++) {
+  for (let i = 1; i <= 52; i++) {
     if (i <= 6) { // Vacations (January/February)
       await week(0.07, timestampMs);
     } else if (i === 7) { // Start of classes for the first year
@@ -123,11 +123,14 @@ const year = async (timestampMs) => {
 }
 
 const week = async (weekWeight, timestampMs) => {
+  let weekDay;
 
   for (let i = 0; i < 7; i++) {
-    if (i === 0) { // Sunday
+    weekDay = new Date(timestampMs).getDay();
+
+    if (weekDay === 0) { // Sunday
       await day(weekWeight * 0.07, timestampMs);
-    } else if (i === 6) { // Saturday
+    } else if (weekDay === 6) { // Saturday
       await day(weekWeight * 0.7, timestampMs);
     } else { // Week days
       await day(weekWeight * 1, timestampMs);
@@ -170,9 +173,11 @@ const hour = async (hourWeight, timestampMs) => {
 
 const minute = async (carsPerMinute, timestampMs) => {
 
+  let response;
+
   for (let i = 0; i < carsPerMinute; i++) {
     try {
-      const response = await _registerMethod(_options, _parkingId, timestampMs, _action);
+      response = await _registerMethod(_options, _parkingId, timestampMs, _action);
 
       console.log(response);
       
