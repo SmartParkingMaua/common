@@ -5,62 +5,63 @@ let _action;
 let _arrActionWeightPerHour;
 let _isRobotConfigured = false;
 
-/*
- * It is necessary to add 1 to every array length below
- * in order to include the last value of the specified range
- */
+// Returns an array with the range number specified
+// E.g: range(5) returns [1, 2, 3, 4, 5]
+// DON'T USE range(0), it will return an empty array
+const range = (n) => [...Array(n + 1).keys()].filter(e => e);
+
 const arrEntranceWeightPerHour = [
-  [...Array(1 + 1).keys()],   // 0h - 1h
-  [...Array(1 + 1).keys()],   // 1h - 2h
-  [...Array(1 + 1).keys()],   // 2h - 3h
-  [...Array(1 + 1).keys()],   // 3h - 4h
-  [...Array(1 + 1).keys()],   // 4h - 5h
-  [...Array(2 + 1).keys()],   // 5h - 6h
-  [...Array(6 + 1).keys()],   // 6h - 7h
-  [...Array(12 + 1).keys()],  // 7h - 8h
-  [...Array(3 + 1).keys()],   // 8h - 9h
-  [...Array(6 + 1).keys()],   // 9h - 10h
-  [...Array(6 + 1).keys()],   // 10h - 11h
-  [...Array(6 + 1).keys()],   // 11h - 12h
-  [...Array(6 + 1).keys()],   // 12h - 13h
-  [...Array(3 + 1).keys()],   // 13h - 14h
-  [...Array(3 + 1).keys()],   // 14h - 15h
-  [...Array(3 + 1).keys()],   // 15h - 16h
-  [...Array(3 + 1).keys()],   // 16h - 17h
-  [...Array(6 + 1).keys()],   // 17h - 18h
-  [...Array(6 + 1).keys()],   // 18h - 19h
-  [...Array(6 + 1).keys()],   // 19h - 20h
-  [...Array(2 + 1).keys()],   // 20h - 21h
-  [...Array(2 + 1).keys()],   // 21h - 22h
-  [...Array(3 + 1).keys()],   // 22h - 23h
-  [...Array(1 + 1).keys()]    // 23h - 24h
+  range(1),   // 0h - 1h
+  range(1),   // 1h - 2h
+  range(1),   // 2h - 3h
+  range(1),   // 3h - 4h
+  range(1),   // 4h - 5h
+  range(2),   // 5h - 6h
+  range(6),   // 6h - 7h
+  range(12),  // 7h - 8h
+  range(3),   // 8h - 9h
+  range(6),   // 9h - 10h
+  range(6),   // 10h - 11h
+  range(6),   // 11h - 12h
+  range(6),   // 12h - 13h
+  range(3),   // 13h - 14h
+  range(3),   // 14h - 15h
+  range(3),   // 15h - 16h
+  range(3),   // 16h - 17h
+  range(6),   // 17h - 18h
+  range(6),   // 18h - 19h
+  range(6),   // 19h - 20h
+  range(2),   // 20h - 21h
+  range(2),   // 21h - 22h
+  range(3),   // 22h - 23h
+  range(1)    // 23h - 24h
 ];
 
 const arrExitWeightPerHour = [
-  [...Array(2 + 1).keys()],   // 0h - 1h
-  [...Array(1 + 1).keys()],   // 1h - 2h
-  [...Array(1 + 1).keys()],   // 2h - 3h
-  [...Array(1 + 1).keys()],   // 3h - 4h
-  [...Array(1 + 1).keys()],   // 4h - 5h
-  [...Array(1 + 1).keys()],   // 5h - 6h
-  [...Array(2 + 1).keys()],   // 6h - 7h
-  [...Array(4 + 1).keys()],   // 7h - 8h
-  [...Array(3 + 1).keys()],   // 8h - 9h
-  [...Array(3 + 1).keys()],   // 9h - 10h
-  [...Array(3 + 1).keys()],   // 10h - 11h
-  [...Array(4 + 1).keys()],   // 11h - 12h
-  [...Array(4 + 1).keys()],   // 12h - 13h
-  [...Array(10 + 1).keys()],  // 13h - 14h
-  [...Array(3 + 1).keys()],   // 14h - 15h
-  [...Array(6 + 1).keys()],   // 15h - 16h
-  [...Array(3 + 1).keys()],   // 16h - 17h
-  [...Array(6 + 1).keys()],   // 17h - 18h
-  [...Array(6 + 1).keys()],   // 18h - 19h
-  [...Array(4 + 1).keys()],   // 19h - 20h
-  [...Array(4 + 1).keys()],   // 20h - 21h
-  [...Array(4 + 1).keys()],   // 21h - 22h
-  [...Array(10 + 1).keys()],  // 22h - 23h
-  [...Array(4 + 1).keys()]    // 23h - 24h
+  range(2),   // 0h - 1h
+  range(1),   // 1h - 2h
+  range(1),   // 2h - 3h
+  range(1),   // 3h - 4h
+  range(1),   // 4h - 5h
+  range(1),   // 5h - 6h
+  range(2),   // 6h - 7h
+  range(4),   // 7h - 8h
+  range(3),   // 8h - 9h
+  range(3),   // 9h - 10h
+  range(3),   // 10h - 11h
+  range(4),   // 11h - 12h
+  range(4),   // 12h - 13h
+  range(10),  // 13h - 14h
+  range(3),   // 14h - 15h
+  range(6),   // 15h - 16h
+  range(3),   // 16h - 17h
+  range(6),   // 17h - 18h
+  range(6),   // 18h - 19h
+  range(4),   // 19h - 20h
+  range(4),   // 20h - 21h
+  range(4),   // 21h - 22h
+  range(10),  // 22h - 23h
+  range(4)    // 23h - 24h
 ];
 
 
@@ -116,7 +117,7 @@ const year = async (timestampMs) => {
       await week(1, timestampMs);
     }
 
-    timestampMs += 604800 * 1000; // One week period timestamp
+    timestampMs += 604800000; // One week period timestamp
   }
 
 }
@@ -132,7 +133,7 @@ const week = async (weekWeight, timestampMs) => {
       await day(weekWeight * 1, timestampMs);
     }
 
-    timestampMs += 86400 * 1000; // One day period timestamp
+    timestampMs += 86400000; // One day period timestamp
   }
 
 }
@@ -140,15 +141,15 @@ const week = async (weekWeight, timestampMs) => {
 const day = async (dayWeight, timestampMs) => {
 
   let hourWeight;
+  let pickedRange;
 
   for (let i = 0; i < 24; i++) {
-    hourWeight = dayWeight * _arrActionWeightPerHour[i][
-      Math.floor(Math.random() * _arrActionWeightPerHour[i].length)
-    ];
+    pickedRange = Math.floor(Math.random() * _arrActionWeightPerHour[i].length);
+    hourWeight = dayWeight * _arrActionWeightPerHour[i][pickedRange];
 
     await hour(hourWeight, timestampMs);
 
-    timestampMs += 3600 * 1000; // One hour period timestamp
+    timestampMs += 3600000; // One hour period timestamp
   }
 
 }
@@ -162,7 +163,7 @@ const hour = async (hourWeight, timestampMs) => {
 
     await minute(carsPerMinute, timestampMs);
 
-    timestampMs += 60 * 1000; // One minute period timestamp
+    timestampMs += 60000; // One minute period timestamp
   }
 
 }
@@ -175,7 +176,7 @@ const minute = async (carsPerMinute, timestampMs) => {
 
       console.log(response);
       
-      timestampMs += 60 * 1000 / carsPerMinute; // One car per n seconds period timestamp
+      timestampMs += 60000 / carsPerMinute; // One car per n seconds period timestamp
     } catch (error) {
       console.error(error);
     }
